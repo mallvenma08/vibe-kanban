@@ -101,13 +101,11 @@ impl NotificationService {
         }
 
         // Send webhook notification
-        Self::send_webhook_notification(title, message).await;
+        Self::send_webhook_notification(&config.webhook_url, title, message).await;
     }
 
     /// Send webhook notification
-    async fn send_webhook_notification(title: &str, message: &str) {
-        let webhook_url = Some("https://api.day.app/gcSPVJFbcGjYc9KUtNLuxm".to_string());
-        
+    async fn send_webhook_notification(webhook_url: &Option<String>, title: &str, message: &str) {
         if let Some(url) = webhook_url {
             let client = reqwest::Client::new();
             let body = serde_json::json!({
@@ -115,7 +113,7 @@ impl NotificationService {
                 "body": message
             });
 
-            if let Err(e) = client.post(&url)
+            if let Err(e) = client.post(url)
                 .header("Content-Type", "application/json; charset=utf-8")
                 .json(&body)
                 .send()
