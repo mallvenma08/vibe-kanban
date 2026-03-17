@@ -762,6 +762,26 @@ export function GeneralSettingsSection() {
             })
           }
         />
+
+        <SettingsField
+          label={t('settings.general.notifications.webhook.label')}
+          description={t('settings.general.notifications.webhook.helper')}
+        >
+          <SettingsInput
+            value={draft?.notifications.webhook_url ?? ''}
+            onChange={(value) =>
+              updateDraft({
+                notifications: {
+                  ...draft!.notifications,
+                  webhook_url: value || undefined,
+                },
+              })
+            }
+            placeholder={t(
+              'settings.general.notifications.webhook.placeholder'
+            )}
+          />
+        </SettingsField>
       </SettingsCard>
 
       {/* Message Input */}
