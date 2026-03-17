@@ -12,8 +12,16 @@
       "default": null
     },
     "model": {
+      "description": "Model override for Kiro chat, for example: auto, claude-opus-4.6, claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4",
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "trust_all_tools": {
+      "description": "If true, passes --trust-all-tools so Kiro auto-approves tool usage; if false, Kiro prompts for tool approval",
+      "type": [
+        "boolean",
         "null"
       ]
     },
