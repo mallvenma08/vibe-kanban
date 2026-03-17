@@ -38,7 +38,7 @@ pub struct Kiro {
 
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "model_id")]
     #[schemars(
-        description = "Model override for Kiro chat, for example: auto, claude-opus-4.6, claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4"
+        description = "Model override for Kiro chat, for example: auto, claude-opus-4.6, claude-sonnet-4.6, claude-opus-4.5, claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5"
     )]
     pub model: Option<String>,
 
@@ -312,9 +312,11 @@ impl StandardCodingAgentExecutor for Kiro {
                 models: [
                     ("auto", "Auto"),
                     ("claude-opus-4.6", "Claude Opus 4.6"),
+                    ("claude-sonnet-4.6", "Claude Sonnet 4.6"),
+                    ("claude-opus-4.5", "Claude Opus 4.5"),
                     ("claude-sonnet-4.5", "Claude Sonnet 4.5"),
                     ("claude-sonnet-4", "Claude Sonnet 4"),
-                    ("claude-haiku-4", "Claude Haiku 4"),
+                    ("claude-haiku-4.5", "Claude Haiku 4.5"),
                 ]
                 .into_iter()
                 .map(|(id, name)| ModelInfo {
