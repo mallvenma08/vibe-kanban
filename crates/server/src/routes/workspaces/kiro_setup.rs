@@ -76,7 +76,9 @@ pub async fn run_kiro_setup(
 
 #[cfg(unix)]
 async fn get_setup_helper_action() -> Result<ExecutorAction, ApiError> {
-    let install_script = r#"#!/bin/bash
+    use utils::shell::UnixShell;
+
+    let mut install_script = r#"#!/bin/bash
 set -e
 
 echo "Installing Kiro CLI..."
@@ -87,12 +89,36 @@ if ! command -v kiro-cli &> /dev/null; then
 else
     echo "Kiro CLI already installed"
 fi
+"#
+    .to_string();
 
-echo "Note: Please run 'kiro-cli login' manually to authenticate"
-"#;
+    if let Some(config_file) = UnixShell::current_shell().config_file() {
+        let config_file_string = config_file.to_string_lossy().to_string();
+        let quoted = shlex::try_quote(&config_file_string)
+            .map_err(|e| ApiError::Workspace(WorkspaceError::ValidationError(e.to_string())))?;
+        install_script.push_str(&format!(
+            r#"
+echo "Ensuring Kiro CLI is on PATH..."
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> {quoted}
+"#
+        ));
+    }
 
     let install_request = ScriptRequest {
-        script: install_script.to_string(),
+        script: install_script,
+        language: ScriptRequestLanguage::Bash,
+        context: ScriptContext::ToolInstallScript,
+        working_dir: None,
+    };
+
+    let login_request = ScriptRequest {
+        script: r#"#!/bin/bash
+set -e
+export PATH="$HOME/.local/bin:$PATH"
+kiro-cli login
+kiro-cli whoami --format json || true
+"#
+        .to_string(),
         language: ScriptRequestLanguage::Bash,
         context: ScriptContext::ToolInstallScript,
         working_dir: None,
@@ -100,13 +126,16 @@ echo "Note: Please run 'kiro-cli login' manually to authenticate"
 
     Ok(ExecutorAction::new(
         ExecutorActionType::ScriptRequest(install_request),
-        None,
+        Some(Box::new(ExecutorAction::new(
+            ExecutorActionType::ScriptRequest(login_request),
+            None,
+        ))),
     ))
 }
 
 #[cfg(not(unix))]
 async fn get_setup_helper_action() -> Result<ExecutorAction, ApiError> {
     Err(ApiError::Executor(
-        executors::executors::ExecutorError::UnsupportedPlatform,
+        executors::executors::ExecutorError::SetupHelperNotSupported,
     ))
 }
