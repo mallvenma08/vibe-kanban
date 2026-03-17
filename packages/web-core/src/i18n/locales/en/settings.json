@@ -200,6 +200,11 @@
         "push": {
           "label": "Push Notifications",
           "helper": "Show system notifications when workspaces finish running."
+        },
+        "webhook": {
+          "label": "Webhook URL",
+          "helper": "Send HTTP POST notifications to this URL when workspaces finish running.",
+          "placeholder": "https://example.com/webhook"
         }
       },
       "messageInput": {

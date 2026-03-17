@@ -200,6 +200,11 @@
         "push": {
           "label": "Notificaciones Push",
           "helper": "Muestra notificaciones del sistema cuando las tareas terminan de ejecutarse."
+        },
+        "webhook": {
+          "label": "URL Webhook",
+          "helper": "Envía notificaciones HTTP POST a esta URL cuando las tareas terminan de ejecutarse.",
+          "placeholder": "https://example.com/webhook"
         }
       },
       "messageInput": {

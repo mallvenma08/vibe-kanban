@@ -200,6 +200,11 @@
         "push": {
           "label": "푸시 알림",
           "helper": "작업 시도가 완료되면 시스템 알림을 표시합니다."
+        },
+        "webhook": {
+          "label": "Webhook URL",
+          "helper": "작업 시도가 완료되면 이 URL로 HTTP POST 알림을 보냅니다.",
+          "placeholder": "https://example.com/webhook"
         }
       },
       "messageInput": {

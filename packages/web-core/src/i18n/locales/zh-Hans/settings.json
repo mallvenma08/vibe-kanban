@@ -200,6 +200,11 @@
         "push": {
           "label": "推送通知",
           "helper": "任务尝试完成运行时显示系统通知。"
+        },
+        "webhook": {
+          "label": "Webhook URL",
+          "helper": "任务尝试完成运行时向此 URL 发送 HTTP POST 通知。",
+          "placeholder": "https://example.com/webhook"
         }
       },
       "messageInput": {
