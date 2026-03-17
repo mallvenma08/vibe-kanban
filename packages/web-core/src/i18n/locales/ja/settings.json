@@ -200,6 +200,11 @@
         "push": {
           "label": "プッシュ通知",
           "helper": "タスク試行の実行が完了したときにシステム通知を表示します。"
+        },
+        "webhook": {
+          "label": "Webhook URL",
+          "helper": "タスク試行の実行が完了したときにこのURLにHTTP POST通知を送信します。",
+          "placeholder": "https://example.com/webhook"
         }
       },
       "messageInput": {
