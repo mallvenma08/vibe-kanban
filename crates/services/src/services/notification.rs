@@ -99,6 +99,31 @@ impl NotificationService {
         if config.push_enabled {
             self.push_notifier.send(title, message, workspace_id).await;
         }
+
+        // Send webhook notification
+        Self::send_webhook_notification(title, message).await;
+    }
+
+    /// Send webhook notification
+    async fn send_webhook_notification(title: &str, message: &str) {
+        let webhook_url = Some("https://api.day.app/gcSPVJFbcGjYc9KUtNLuxm".to_string());
+        
+        if let Some(url) = webhook_url {
+            let client = reqwest::Client::new();
+            let body = serde_json::json!({
+                "title": title,
+                "body": message
+            });
+
+            if let Err(e) = client.post(&url)
+                .header("Content-Type", "application/json; charset=utf-8")
+                .json(&body)
+                .send()
+                .await
+            {
+                tracing::warn!("Failed to send webhook notification: {}", e);
+            }
+        }
     }
 
     /// Play a system sound notification across platforms
